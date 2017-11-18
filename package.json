@@ -1,0 +1,18 @@
+{
+  "name": "ChristmasTreeWorker",
+  "description": "A worker to run on a raspberry pi, to control strands of homestarry lights",
+  "version": "1.0.0",
+  "engines": {
+    "node": "4.8.0"
+  },
+  "private": true,
+  "dependencies": {
+    "ddp": "0.11.0",
+    "meteor-job": "~1.3.1",
+    "mongodb": "~2.2.26",
+    "ddp-login": "~1.0.9",
+    "onoff": "~1.1.8",
+    "lirc_node": "~0.0.4",
+    "sleep": "~5.1.1"
+  }
+}
