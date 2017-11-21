@@ -45,7 +45,7 @@ ddp.connect(function(err) {
     })
 });
 
-function processTree(strands, job, cb, db){
+function processTree(lirc_node, strands, job, cb, db){
     if(job.data){
         var actions = job.data.actions;
 console.log("has actions");
