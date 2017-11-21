@@ -46,10 +46,10 @@ ddp.connect(function(err) {
 });
 
 function processTree(strands, job, cb, db){
-    var actionList = job.data.actionList;
+    var actions = job.data.actions;
 
-    while(actionList.length){
-        var thisAction = actionList.shift();
+    while(actions.length){
+        var thisAction = actions.shift();
         strands.forEach((strand, index)=>{
             if(thisAction.strands.indexOf(index) > -1){
                 strand.writeSync(1);
