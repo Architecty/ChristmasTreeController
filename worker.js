@@ -48,7 +48,7 @@ ddp.connect(function(err) {
 function processTree(lirc_node, strands, job, cb, db){
     if(job.data){
         var actions = job.data.actions;
-console.log("has actions");
+        console.log("has actions");
         while(actions.length){
             var thisAction = actions.shift();
             strands.forEach((strand, index)=>{
@@ -71,9 +71,14 @@ console.log("has actions");
                 job.done();
                 cb();
             })
+        } else {
+            job.done();
+            cb();
         }
+
+    } else {
+        job.done();
+        cb();
     }
-    job.done();
-    cb();
 
 }
