@@ -53,7 +53,7 @@ function processTree(lirc_node, strands, job, cb, db){
         while(actions.length){
             var thisAction = actions.shift();
             strands.forEach((strand, index)=>{
-                if(thisAction.strands.indexOf(index) > -1){
+                if(thisAction.strands.indexOf(index) > -1 || thisAction.strands === 'ALL'){
                 console.log("Running strand", index)
                 strand.writeSync(1);
             } else {
