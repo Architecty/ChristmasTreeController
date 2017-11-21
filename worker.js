@@ -38,6 +38,7 @@ ddp.connect(function(err) {
     });
 
         MongoClient.connect(config.mongoURI, function (err, db) {
+            console.log("Worker Started Up");
             Job.processJobs('jobs', 'commandTree', {concurrency:1, workTimeout: 15 * 1000}, function(job, cb){
                 processTree(lirc_node, strands, job, cb, db);
             });
