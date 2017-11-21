@@ -35,7 +35,7 @@ ddp.connect(function(err) {
         var strands = [];
         config.strandPins.forEach(pinAssignment=>{
             strands.push(new Gpio(pinAssignment, 'out'));
-        });
+    });
 
         MongoClient.connect(config.mongoURI, function (err, db) {
             Job.processJobs('jobs', 'commandTree', {concurrency:1, workTimeout: 15 * 1000}, function(job, cb){
@@ -46,33 +46,34 @@ ddp.connect(function(err) {
 });
 
 function processTree(strands, job, cb, db){
-    var actions = job.data.actions;
-
-    while(actions.length){
-        var thisAction = actions.shift();
-        strands.forEach((strand, index)=>{
-            if(thisAction.strands.indexOf(index) > -1){
+    if(job.data){
+        var actions = job.data.actions;
+console.log("has actions");
+        while(actions.length){
+            var thisAction = actions.shift();
+            strands.forEach((strand, index)=>{
+                if(thisAction.strands.indexOf(index) > -1){
                 strand.writeSync(1);
             } else {
                 strand.writeSync(0);
             }
         });
-        lirc_node.irsend.send_once('homestarry-13-colors', thisAction.key);
-        console.log(thisAction);
-        sleep.msleep(thisAction.wait);
-    }
+            lirc_node.irsend.send_once('homestarry-13-colors', thisAction.key);
+            console.log(thisAction);
+            sleep.msleep(thisAction.wait);
+        }
 
-    if(job.data.repeat){
-        db.collection('treeJobs').find({'status': 'ready'}).toArray(function(err, docs){
-            if(docs.length){
-                Job('onumaJobs', 'spaceValueListUpdate', job.data).priority('normal').save();
-            }
-            job.done();
-            cb();
-        })
-    } else {
-        job.done();
-        cb();
+        if(job.data.repeat){
+            db.collection('treeJobs').find({'status': 'ready'}).toArray(function(err, docs){
+                if(docs.length){
+                    Job('onumaJobs', 'spaceValueListUpdate', job.data).priority('normal').save();
+                }
+                job.done();
+                cb();
+            })
+        }
     }
+    job.done();
+    cb();
 
 }
