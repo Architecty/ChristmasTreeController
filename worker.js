@@ -33,7 +33,7 @@ ddp.connect(function(err) {
 
         lirc_node.init();
         var strands = [];
-        config.strandPins.forEach(pinAssignment=>{
+        config.strandPins.forEach((pinAssignment)=>{
             strands.push(new Gpio(pinAssignment, 'out'));
     });
 
@@ -54,11 +54,13 @@ function processTree(lirc_node, strands, job, cb, db){
             var thisAction = actions.shift();
             strands.forEach((strand, index)=>{
                 if(thisAction.strands.indexOf(index) > -1){
+                console.log("Running strand", index)
                 strand.writeSync(1);
             } else {
                 strand.writeSync(0);
             }
         });
+            sleep.msleep(300);
             lirc_node.irsend.send_once('homestarry-13-colors', thisAction.key);
             console.log(thisAction);
             sleep.msleep(thisAction.wait);
